@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_ServoKit.svg?branch=master
-    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_ServoKit
+.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ServoKit.svg?branch=master
+    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_ServoKit
     :alt: Build Status
 
 CircuitPython helper library for the PWM/Servo FeatherWing, Shield and Pi HAT and Bonnet kits.
