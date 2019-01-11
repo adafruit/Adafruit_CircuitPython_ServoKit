@@ -6,11 +6,9 @@ from adafruit_servokit import ServoKit
 # 8 for FeatherWing, 16 for Shield/HAT/Bonnet.
 kit = ServoKit(channels=8)
 
-# Change range to the number of servos connected.
-# They must be on channels within the specified range!
-for i in range(8):
+for i in range(len(kit.servo)):
     kit.servo[i].angle = 180
 time.sleep(1)
-for i in range(8):
+for i in range(len(kit.servo)):
     kit.servo[i].angle = 0
 time.sleep(1)
