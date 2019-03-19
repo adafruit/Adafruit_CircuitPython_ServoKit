@@ -50,7 +50,6 @@ Implementation Notes
 """
 
 import board
-import busio
 from adafruit_pca9685 import PCA9685
 
 __version__ = "0.0.0-auto.0"
@@ -77,12 +76,13 @@ class ServoKit:
                                          Default reference clock speed is ``25000000``.
 
     """
-    def __init__(self, *, channels, address=0x40, reference_clock_speed=25000000):
+    def __init__(self, *, channels, i2c=None, address=0x40, reference_clock_speed=25000000):
         if channels not in [8, 16]:
             raise ValueError("servo_channels must be 8 or 16!")
         self._items = [None] * channels
         self._channels = channels
-        i2c = busio.I2C(board.SCL, board.SDA)
+        if i2c is None:
+            i2c = board.I2C()
         self._pca = PCA9685(i2c, address=address, reference_clock_speed=reference_clock_speed)
         self._pca.frequency = 50
 
