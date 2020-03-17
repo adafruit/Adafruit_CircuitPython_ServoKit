@@ -76,14 +76,19 @@ class ServoKit:
                                          Default reference clock speed is ``25000000``.
 
     """
-    def __init__(self, *, channels, i2c=None, address=0x40, reference_clock_speed=25000000):
+
+    def __init__(
+        self, *, channels, i2c=None, address=0x40, reference_clock_speed=25000000
+    ):
         if channels not in [8, 16]:
             raise ValueError("servo_channels must be 8 or 16!")
         self._items = [None] * channels
         self._channels = channels
         if i2c is None:
             i2c = board.I2C()
-        self._pca = PCA9685(i2c, address=address, reference_clock_speed=reference_clock_speed)
+        self._pca = PCA9685(
+            i2c, address=address, reference_clock_speed=reference_clock_speed
+        )
         self._pca.frequency = 50
 
         self._servo = _Servo(self)
@@ -141,7 +146,8 @@ class _Servo:
         self.kit = kit
 
     def __getitem__(self, servo_channel):
-        import adafruit_motor.servo
+        import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
+
         num_channels = self.kit._channels
         if servo_channel >= num_channels or servo_channel < 0:
             raise ValueError("servo must be 0-{}!".format(num_channels - 1))
@@ -164,16 +170,21 @@ class _ContinuousServo:
         self.kit = kit
 
     def __getitem__(self, servo_channel):
-        import adafruit_motor.servo
+        import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
+
         num_channels = self.kit._channels
         if servo_channel >= num_channels or servo_channel < 0:
             raise ValueError("servo must be 0-{}!".format(num_channels - 1))
         servo = self.kit._items[servo_channel]
         if servo is None:
-            servo = adafruit_motor.servo.ContinuousServo(self.kit._pca.channels[servo_channel])
+            servo = adafruit_motor.servo.ContinuousServo(
+                self.kit._pca.channels[servo_channel]
+            )
             self.kit._items[servo_channel] = servo
             return servo
-        if isinstance(self.kit._items[servo_channel], adafruit_motor.servo.ContinuousServo):
+        if isinstance(
+            self.kit._items[servo_channel], adafruit_motor.servo.ContinuousServo
+        ):
             return servo
         raise ValueError("Channel {} is already in use.".format(servo_channel))
 
