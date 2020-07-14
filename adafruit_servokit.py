@@ -74,11 +74,13 @@ class ServoKit:
        :param int address: The I2C address of the PCA9685. Default address is ``0x40``.
        :param int reference_clock_speed: The frequency of the internal reference clock in Hertz.
                                          Default reference clock speed is ``25000000``.
+       :param int frequency: The overall PWM frequency of the PCA9685 in Hertz.
+                                         Default frequency is ``50``.
 
     """
 
     def __init__(
-        self, *, channels, i2c=None, address=0x40, reference_clock_speed=25000000
+        self, *, channels, i2c=None, address=0x40, reference_clock_speed=25000000, frequency=50
     ):
         if channels not in [8, 16]:
             raise ValueError("servo_channels must be 8 or 16!")
@@ -89,7 +91,7 @@ class ServoKit:
         self._pca = PCA9685(
             i2c, address=address, reference_clock_speed=reference_clock_speed
         )
-        self._pca.frequency = 50
+        self._pca.frequency = frequency
 
         self._servo = _Servo(self)
         self._continuous_servo = _ContinuousServo(self)
