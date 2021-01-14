@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """Example that iterates through a servo on every channel, sets each to 180 and then back to 0."""
 import time
 from adafruit_servokit import ServoKit

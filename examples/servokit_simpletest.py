@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """Simple test for a standard servo on channel 0 and a continuous rotation servo on channel 1."""
 import time
 from adafruit_servokit import ServoKit
