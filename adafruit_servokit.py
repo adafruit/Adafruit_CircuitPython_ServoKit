@@ -87,7 +87,7 @@ class ServoKit:
 
     @property
     def servo(self):
-        """:py:class:``~adafruit_motor.servo.Servo`` controls for standard servos.
+        """:class:`~adafruit_motor.servo.Servo` controls for standard servos.
 
         This FeatherWing example rotates a servo on channel ``0`` to ``180`` degrees for one second,
         and then returns it to ``0`` degrees.
@@ -108,7 +108,7 @@ class ServoKit:
 
     @property
     def continuous_servo(self):
-        """:py:class:``~adafruit_motor.servo.ContinuousServo`` controls for continuous rotation
+        """:class:`~adafruit_motor.servo.ContinuousServo` controls for continuous rotation
         servos.
 
         This FeatherWing example rotates a continuous rotation servo on channel ``0`` forward for
