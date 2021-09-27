@@ -9,7 +9,7 @@ from adafruit_servokit import ServoKit
 # 8 for FeatherWing, 16 for Shield/HAT/Bonnet.
 kit = ServoKit(channels=8)
 
-for i in range(len(kit.servo)):
+for i in range(len(kit.servo)):  # pylint: disable=consider-using-enumerate
     kit.servo[i].angle = 180
     time.sleep(1)
     kit.servo[i].angle = 0
