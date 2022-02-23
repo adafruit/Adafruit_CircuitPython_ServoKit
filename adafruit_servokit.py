@@ -35,6 +35,13 @@ Implementation Notes
 import board
 from adafruit_pca9685 import PCA9685
 
+try:
+    from typing import Optional
+    from busio import I2C
+    from adafruit_motor.servo import Servo, ContinuousServo
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_ServoKit.git"
 
@@ -54,6 +61,8 @@ class ServoKit:
 
     :param int channels: The number of servo channels available. Must be 8 or 16. The FeatherWing
                          has 8 channels. The Shield, HAT, and Bonnet have 16 channels.
+    :param ~I2C i2c: The I2C bus to use. If not provided, it will use generate the default I2C
+                                      bus singleton ``busio.I2C()`` and use that.
     :param int address: The I2C address of the PCA9685. Default address is ``0x40``.
     :param int reference_clock_speed: The frequency of the internal reference clock in Hertz.
                                       Default reference clock speed is ``25000000``.
@@ -65,12 +74,12 @@ class ServoKit:
     def __init__(
         self,
         *,
-        channels,
-        i2c=None,
-        address=0x40,
-        reference_clock_speed=25000000,
-        frequency=50
-    ):
+        channels: int,
+        i2c: Optional[I2C] = None,
+        address: int = 0x40,
+        reference_clock_speed: int = 25000000,
+        frequency: int = 50
+    ) -> None:
         if channels not in [8, 16]:
             raise ValueError("servo_channels must be 8 or 16!")
         self._items = [None] * channels
@@ -86,7 +95,7 @@ class ServoKit:
         self._continuous_servo = _ContinuousServo(self)
 
     @property
-    def servo(self):
+    def servo(self) -> "_Servo":
         """:class:`~adafruit_motor.servo.Servo` controls for standard servos.
 
         This FeatherWing example rotates a servo on channel ``0`` to ``180`` degrees for one second,
@@ -107,7 +116,7 @@ class ServoKit:
         return self._servo
 
     @property
-    def continuous_servo(self):
+    def continuous_servo(self) -> "_ContinuousServo":
         """:class:`~adafruit_motor.servo.ContinuousServo` controls for continuous rotation
         servos.
 
@@ -133,10 +142,10 @@ class ServoKit:
 
 class _Servo:
     # pylint: disable=protected-access
-    def __init__(self, kit):
+    def __init__(self, kit: ServoKit) -> None:
         self.kit = kit
 
-    def __getitem__(self, servo_channel):
+    def __getitem__(self, servo_channel: int) -> Servo:
         import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
 
         num_channels = self.kit._channels
@@ -151,16 +160,16 @@ class _Servo:
             return servo
         raise ValueError("Channel {} is already in use.".format(servo_channel))
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.kit._items)
 
 
 class _ContinuousServo:
     # pylint: disable=protected-access
-    def __init__(self, kit):
+    def __init__(self, kit: ServoKit) -> None:
         self.kit = kit
 
-    def __getitem__(self, servo_channel):
+    def __getitem__(self, servo_channel: int) -> ContinuousServo:
         import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
 
         num_channels = self.kit._channels
@@ -179,5 +188,5 @@ class _ContinuousServo:
             return servo
         raise ValueError("Channel {} is already in use.".format(servo_channel))
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.kit._items)
