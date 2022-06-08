@@ -36,7 +36,7 @@ setup(
     author="Adafruit Industries",
     author_email="circuitpython@adafruit.com",
     install_requires=[
-        "Adafruit-Blinka",
+        "Adafruit-Blinka>=7.0.0",
         "adafruit-circuitpython-busdevice",
         "adafruit-circuitpython-register",
         "adafruit-circuitpython-pca9685",
