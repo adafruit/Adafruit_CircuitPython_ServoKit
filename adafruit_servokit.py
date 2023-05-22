@@ -61,7 +61,7 @@ class ServoKit:
 
     :param int channels: The number of servo channels available. Must be 8 or 16. The FeatherWing
                          has 8 channels. The Shield, HAT, and Bonnet have 16 channels.
-    :param ~I2C i2c: The I2C bus to use. If not provided,the default I2C ``board.I2C()`` will be used.
+    :param ~I2C i2c: The I2C bus to use. If not provided, the default I2C ``board.I2C()`` will be used.
     :param int address: The I2C address of the PCA9685. Default address is ``0x40``.
     :param int reference_clock_speed: The frequency of the internal reference clock in Hertz.
                                       Default reference clock speed is ``25000000``.
