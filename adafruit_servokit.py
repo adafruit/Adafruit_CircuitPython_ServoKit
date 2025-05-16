@@ -37,8 +37,9 @@ from adafruit_pca9685 import PCA9685
 
 try:
     from typing import Optional
+
+    from adafruit_motor.servo import ContinuousServo, Servo
     from busio import I2C
-    from adafruit_motor.servo import Servo, ContinuousServo
 except ImportError:
     pass
 
@@ -78,17 +79,15 @@ class ServoKit:
         i2c: Optional[I2C] = None,
         address: int = 0x40,
         reference_clock_speed: int = 25000000,
-        frequency: int = 50
+        frequency: int = 50,
     ) -> None:
-        if channels not in [8, 16]:
+        if channels not in {8, 16}:
             raise ValueError("servo_channels must be 8 or 16!")
         self._items = [None] * channels
         self._channels = channels
         if i2c is None:
             i2c = board.I2C()
-        self._pca = PCA9685(
-            i2c, address=address, reference_clock_speed=reference_clock_speed
-        )
+        self._pca = PCA9685(i2c, address=address, reference_clock_speed=reference_clock_speed)
         self._pca.frequency = frequency
 
         self._servo = _Servo(self)
@@ -141,16 +140,15 @@ class ServoKit:
 
 
 class _Servo:
-    # pylint: disable=protected-access
     def __init__(self, kit: ServoKit) -> None:
         self.kit = kit
 
     def __getitem__(self, servo_channel: int) -> Servo:
-        import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
+        import adafruit_motor.servo
 
         num_channels = self.kit._channels
         if servo_channel >= num_channels or servo_channel < 0:
-            raise ValueError("servo must be 0-{}!".format(num_channels - 1))
+            raise ValueError(f"servo must be 0-{num_channels - 1}!")
         servo = self.kit._items[servo_channel]
         if servo is None:
             servo = adafruit_motor.servo.Servo(self.kit._pca.channels[servo_channel])
@@ -158,35 +156,30 @@ class _Servo:
             return servo
         if isinstance(self.kit._items[servo_channel], adafruit_motor.servo.Servo):
             return servo
-        raise ValueError("Channel {} is already in use.".format(servo_channel))
+        raise ValueError(f"Channel {servo_channel} is already in use.")
 
     def __len__(self) -> int:
         return len(self.kit._items)
 
 
 class _ContinuousServo:
-    # pylint: disable=protected-access
     def __init__(self, kit: ServoKit) -> None:
         self.kit = kit
 
     def __getitem__(self, servo_channel: int) -> ContinuousServo:
-        import adafruit_motor.servo  # pylint: disable=import-outside-toplevel
+        import adafruit_motor.servo
 
         num_channels = self.kit._channels
         if servo_channel >= num_channels or servo_channel < 0:
-            raise ValueError("servo must be 0-{}!".format(num_channels - 1))
+            raise ValueError(f"servo must be 0-{num_channels - 1}!")
         servo = self.kit._items[servo_channel]
         if servo is None:
-            servo = adafruit_motor.servo.ContinuousServo(
-                self.kit._pca.channels[servo_channel]
-            )
+            servo = adafruit_motor.servo.ContinuousServo(self.kit._pca.channels[servo_channel])
             self.kit._items[servo_channel] = servo
             return servo
-        if isinstance(
-            self.kit._items[servo_channel], adafruit_motor.servo.ContinuousServo
-        ):
+        if isinstance(self.kit._items[servo_channel], adafruit_motor.servo.ContinuousServo):
             return servo
-        raise ValueError("Channel {} is already in use.".format(servo_channel))
+        raise ValueError(f"Channel {servo_channel} is already in use.")
 
     def __len__(self) -> int:
         return len(self.kit._items)
